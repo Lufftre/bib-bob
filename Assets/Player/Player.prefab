@@ -28,7 +28,7 @@ GameObject:
   - component: {fileID: 114324622366865364}
   - component: {fileID: 114423369320566700}
   - component: {fileID: 114200626909282646}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45,7 +45,7 @@ GameObject:
   - component: {fileID: 224581804154422000}
   - component: {fileID: 222577783164122244}
   - component: {fileID: 114059331446672172}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -62,7 +62,7 @@ GameObject:
   - component: {fileID: 224644195982400720}
   - component: {fileID: 222172366986313468}
   - component: {fileID: 114734341323024880}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Foreground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -80,7 +80,7 @@ GameObject:
   - component: {fileID: 223993336067390402}
   - component: {fileID: 114653111557227436}
   - component: {fileID: 114329419432772324}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Healthbar Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -95,7 +95,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4686740075810212}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Bullet Spawn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -112,7 +112,7 @@ GameObject:
   - component: {fileID: 4866822295702908}
   - component: {fileID: 33000229749280922}
   - component: {fileID: 23208209183658540}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -139,7 +139,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1031361444688966}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.0011144, y: 1.9188144, z: 0}
+  m_LocalPosition: {x: 10.616384, y: -0.37741148, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4866822295702908}
@@ -155,7 +155,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1995199449603990}
   m_LocalRotation: {x: -0, y: -0, z: 0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 0.6, y: -0.001, z: 0.55}
+  m_LocalPosition: {x: 0.6, y: -0.001, z: 0}
   m_LocalScale: {x: 0.10000006, y: 0.10000006, z: 0.1}
   m_Children: []
   m_Father: {fileID: 4773504440722148}
@@ -209,7 +209,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 072af2df8bc85428e8777bd196151c86, type: 2}
+  - {fileID: 2100000, guid: 7f29aecb645f64bd68d5e859c71a2867, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -327,6 +327,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentHealth: 100
+  destroyOnDeath: 0
   healthBar: {fileID: 224644195982400720}
 --- !u!114 &114324622366865364
 MonoBehaviour:
@@ -408,9 +409,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d322ad1457c2405f9a6f8a7b4d35a20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveForce: 10
+  moveForce: 6
   friction: 0.6
   jumpVelocity: 12
+  grounded: 1
   bulletPrefab: {fileID: 1556824570848264, guid: 2c5834a06c4d1437581bedefc563119e,
     type: 2}
   bulletSpawn: {fileID: 4686740075810212}
@@ -552,7 +554,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1847229975926950}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -1}
+  m_LocalPosition: {x: 0, y: 0, z: -0.505}
   m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
   m_Children:
   - {fileID: 224581804154422000}

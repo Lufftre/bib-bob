@@ -10,12 +10,15 @@ public class PlayerController : NetworkBehaviour {
 	public float friction;
 	public float jumpVelocity;
 
-	bool grounded = true;
+	public bool grounded = true;
 	Vector2 playerSize;
 	Vector2 boxSize;
 
 	public GameObject bulletPrefab;
 	public Transform bulletSpawn;
+	float bulletSpeed = 20;
+	int maxJumps = 2;
+	int curJumps = 0;
 
 	void ColorPlayer(Color frontColor){
 		Color[] c = new Color[24]{
@@ -60,12 +63,21 @@ public class PlayerController : NetworkBehaviour {
 
 
 		// Jump
-		Vector2 boxCenter = (Vector2)transform.position;
-		// grounded = Physics2D.OverlapBox()
-		if(Input.GetButtonDown("Jump") && grounded){
-			rb.AddForce(Vector2.up * jumpVelocity, ForceMode2D.Impulse);
+		if(Input.GetButtonDown("Jump") && (grounded || curJumps < maxJumps)){
+			// rb.AddForce(Vector2.up * jumpVelocity, ForceMode2D.Impulse);
+			rb.velocity = new Vector2(rb.velocity.x, 10);
+			grounded = false;
+			curJumps += 1;
+		} else {
+			bool prevGrounded = grounded;
+			Vector2 boxCenter = (Vector2)transform.position + Vector2.down * (playerSize.y + boxSize.y) * .5f;
+			grounded = (Physics2D.OverlapBox(boxCenter, boxSize, 0f, LayerMask.GetMask("World")) != null);
+			if (grounded){
+				curJumps = 0;
+			} else if (prevGrounded && !grounded){
+				curJumps += 1;
+			}
 		}
-
 		// Horizontal Move
 		float horizontalInput = Input.GetAxis ("Horizontal");
 		rb.AddForce (Vector2.right * horizontalInput * moveForce, ForceMode2D.Impulse);
@@ -80,6 +92,7 @@ public class PlayerController : NetworkBehaviour {
 	// void FixedUpdate () {
 	public override void OnStartLocalPlayer(){
 		ColorPlayer(Color.green);
+		Camera.main.GetComponent<CameraFollow>().setTarget(gameObject.transform);
 	}
 	// }
 	[Command]
@@ -92,7 +105,7 @@ public class PlayerController : NetworkBehaviour {
             bulletSpawn.rotation);
 
         // Add velocity to the bullet
-        bullet.GetComponent<Rigidbody2D>().velocity = bullet.transform.forward * 6;
+        bullet.GetComponent<Rigidbody2D>().velocity = bullet.transform.forward * bulletSpeed;
 
         // Spawn the bullet on the Clients
         NetworkServer.Spawn(bullet);
