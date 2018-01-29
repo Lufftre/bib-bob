@@ -20,6 +20,14 @@ public class PlayerController : NetworkBehaviour {
 	int maxJumps = 2;
 	int curJumps = 0;
 
+	public float fireRate;
+    private float nextFire;
+
+	public AudioClip audioFire;
+	public AudioClip audioJump;
+	public AudioClip audioHurt;
+	AudioSource audioSource;
+
 	void ColorPlayer(Color frontColor){
 		Color[] c = new Color[24]{
 			Color.black,
@@ -55,6 +63,7 @@ public class PlayerController : NetworkBehaviour {
 		playerSize = GetComponent<BoxCollider2D>().size;
 		boxSize = new Vector2(playerSize.x, 0.05f);
 		ColorPlayer(Color.white);
+		audioSource = GetComponent<AudioSource>();
 	}
 	
 	// Update is called once per frame
@@ -68,6 +77,7 @@ public class PlayerController : NetworkBehaviour {
 			rb.velocity = new Vector2(rb.velocity.x, 10);
 			grounded = false;
 			curJumps += 1;
+			audioSource.PlayOneShot(audioJump, 0.2F);
 		} else {
 			bool prevGrounded = grounded;
 			Vector2 boxCenter = (Vector2)transform.position + Vector2.down * (playerSize.y + boxSize.y) * .5f;
@@ -84,14 +94,17 @@ public class PlayerController : NetworkBehaviour {
 		rb.velocity = new Vector2 (rb.velocity.x * friction, rb.velocity.y);
 
 		// Shoot
-	if (Input.GetKeyDown(KeyCode.F)){
-		CmdFire();
+		if (Input.GetButton("Fire1") && Time.time > nextFire){
+			nextFire = Time.time + fireRate;
+			rb.AddForce(transform.right * -10, ForceMode2D.Impulse);
+			audioSource.PlayOneShot(audioFire, 0.5F);
+			CmdFire();
+		}
 	}
 
-	}
 	// void FixedUpdate () {
 	public override void OnStartLocalPlayer(){
-		ColorPlayer(Color.green);
+		//ColorPlayer(Color.green);
 		Camera.main.GetComponent<CameraFollow>().setTarget(gameObject.transform);
 	}
 	// }
@@ -110,8 +123,11 @@ public class PlayerController : NetworkBehaviour {
         // Spawn the bullet on the Clients
         NetworkServer.Spawn(bullet);
 
-        // Destroy the bullet after 2 seconds
-        Destroy(bullet, 2.0f);
+        // Destroy the bullet after 20 seconds
+        Destroy(bullet, 20.0f);
     }
 
+	public void playAudioHurt(){
+		audioSource.PlayOneShot(audioHurt, 0.5F);
+	}
 }
