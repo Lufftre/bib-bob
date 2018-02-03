@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
-public class PlayerController : NetworkBehaviour {
+public class HeroController : NetworkBehaviour {
+
+	[SyncVar (hook = "OnNameChanged")] public string playerName;
+	[SyncVar (hook = "OnColorChanged")] public Color playerColor;
 
 	Rigidbody2D rb;
 	Mesh mesh;
@@ -27,6 +30,12 @@ public class PlayerController : NetworkBehaviour {
 	public AudioClip audioJump;
 	public AudioClip audioHurt;
 	AudioSource audioSource;
+
+	Health health;
+	public LayerMask layerMask;
+	public float rayDistance;
+
+	public float fireKnockback;
 
 	void ColorPlayer(Color frontColor){
 		Color[] c = new Color[24]{
@@ -61,9 +70,10 @@ public class PlayerController : NetworkBehaviour {
 	void Awake () {
 		rb = GetComponent<Rigidbody2D>();
 		playerSize = GetComponent<BoxCollider2D>().size;
-		boxSize = new Vector2(playerSize.x, 0.05f);
-		ColorPlayer(Color.white);
+		boxSize = new Vector2(playerSize.x - .05f, 0.1f);
+		//ColorPlayer(Color.white);
 		audioSource = GetComponent<AudioSource>();
+		health = GetComponent<Health>();
 	}
 	
 	// Update is called once per frame
@@ -80,8 +90,11 @@ public class PlayerController : NetworkBehaviour {
 			audioSource.PlayOneShot(audioJump, 0.2F);
 		} else {
 			bool prevGrounded = grounded;
-			Vector2 boxCenter = (Vector2)transform.position + Vector2.down * (playerSize.y + boxSize.y) * .5f;
-			grounded = (Physics2D.OverlapBox(boxCenter, boxSize, 0f, LayerMask.GetMask("World")) != null);
+			//Vector2 boxCenter = (Vector2)transform.position + Vector2.down * (Mathf.Sqrt(playerSize.y*2) + boxSize.y) * .5f;
+			//grounded = (Physics2D.Raycast(rb.position, Vector2.down, 1f, layerMask) != null);
+			RaycastHit2D rayhit = Physics2D.Raycast(transform.position, Vector2.down, rayDistance, layerMask);
+			if(rayhit) grounded = true; else grounded = false;
+			//grounded = (Physics2D.OverlapBox(boxCenter, boxSize, 0f, LayerMask.GetMask("World")) != null);
 			if (grounded){
 				curJumps = 0;
 			} else if (prevGrounded && !grounded){
@@ -96,18 +109,23 @@ public class PlayerController : NetworkBehaviour {
 		// Shoot
 		if (Input.GetButton("Fire1") && Time.time > nextFire){
 			nextFire = Time.time + fireRate;
-			rb.AddForce(transform.right * -10, ForceMode2D.Impulse);
+			rb.AddForce(transform.right * -fireKnockback, ForceMode2D.Impulse);
 			audioSource.PlayOneShot(audioFire, 0.5F);
 			CmdFire();
 		}
+
+		if (transform.position.y < -50){
+			// health.TakeDamage(health.currentHealth);
+			health.RpcRespawn();
+		}
 	}
 
-	// void FixedUpdate () {
 	public override void OnStartLocalPlayer(){
 		//ColorPlayer(Color.green);
 		Camera.main.GetComponent<CameraFollow>().setTarget(gameObject.transform);
+		health.lives = 1;
 	}
-	// }
+
 	[Command]
     void CmdFire()
     {
@@ -129,5 +147,16 @@ public class PlayerController : NetworkBehaviour {
 
 	public void playAudioHurt(){
 		audioSource.PlayOneShot(audioHurt, 0.5F);
+	}
+
+	void OnNameChanged(string value) {
+		playerName = value;
+		gameObject.name = playerName;
+	}
+
+	void OnColorChanged(Color value) {
+		playerColor = value;
+        Renderer rend = GetComponent<Renderer>();
+        rend.material.color = playerColor;
 	}
 }

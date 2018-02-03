@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using UnityEngine.Networking;
 using System.Collections;
-
+using Prototype.NetworkLobby;
 public class Health : NetworkBehaviour {
 
     public const int maxHealth = 100;
@@ -12,18 +12,23 @@ public class Health : NetworkBehaviour {
 	public bool destroyOnDeath;
 
     public RectTransform healthBar;
-    private NetworkStartPosition[] spawnPoints;
+    //private NetworkStartPosition[] spawnPoints;
     public TextMesh deathText;
 
     [SyncVar(hook = "OnDeath")]
-    public int deaths = 0;
+    public int lives;
 
-    PlayerController pc;
+    HeroController pc;
+    Rigidbody2D rb;
+
+    GameHandler gameHandler;
     
 
     void Start() {
-        spawnPoints = FindObjectsOfType<NetworkStartPosition>();
-        pc = GetComponent<PlayerController>();
+        
+        pc = GetComponent<HeroController>();
+        rb = GetComponent<Rigidbody2D>();
+        gameHandler = GameObject.FindWithTag("GameHandler").GetComponent<GameHandler>();
     }
 
     public void TakeDamage(int amount){
@@ -36,7 +41,7 @@ public class Health : NetworkBehaviour {
 			if (destroyOnDeath) {
 				Destroy(gameObject);
 			} else {
-                deaths += 1;
+                
 				currentHealth = maxHealth;
 				RpcRespawn();
 			}
@@ -52,18 +57,27 @@ public class Health : NetworkBehaviour {
     }
 
     [ClientRpc]
-    void RpcRespawn(){
+    public void RpcRespawn(){
         if (isLocalPlayer) {
-            // Set the spawn point to origin as a default value
-            Vector3 spawnPoint = Vector3.zero;
+            if (lives > 0 ){
+                lives -= 1;
+                // Set the spawn point to origin as a default value
+                Vector3 spawnPoint = Vector3.zero;
+                NetworkStartPosition[] spawnPoints = FindObjectsOfType<NetworkStartPosition>();
+                // If there is a spawn point array and the array is not empty, pick one at random
+                if (spawnPoints != null && spawnPoints.Length > 0) {
+                    spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)].transform.position;
+                }
 
-            // If there is a spawn point array and the array is not empty, pick one at random
-            if (spawnPoints != null && spawnPoints.Length > 0) {
-                spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)].transform.position;
+                // Set the player’s position to the chosen spawn point
+
+                rb.velocity = Vector2.zero;
+                transform.position = spawnPoint;
+            } else {
+                Camera.main.transform.position = new Vector3(0, 0, -35);
+                Camera.main.transform.rotation = Quaternion.identity;
+                gameHandler.HandlePlayerDeath(gameObject);
             }
-
-            // Set the player’s position to the chosen spawn point
-            transform.position = spawnPoint;
         }
     }
 }

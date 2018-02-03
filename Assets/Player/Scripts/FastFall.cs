@@ -25,7 +25,7 @@ public class FastFall : MonoBehaviour {
 			rb.gravityScale = 1;
 		}
 
-		if (Mathf.Abs(rb.velocity.x) > 0 && !Input.GetButton("Horizontal")){
+		if (Mathf.Abs(rb.velocity.x) > 0 && Input.GetAxis("Horizontal") == 0f){
 			rb.velocity = new Vector2 (rb.velocity.x * (1 - 1/stopMultiplier), rb.velocity.y);
 		}
 	}

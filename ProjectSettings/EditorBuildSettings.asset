@@ -9,5 +9,11 @@ EditorBuildSettings:
     path: Assets/Menu.unity
     guid: 9e8c6e0ece444489fb13fffb31a3bd75
   - enabled: 1
-    path: Assets/main.unity
+    path: Assets/Main.unity
     guid: d75361fe4e7904050b8dfd1cee253fb2
+  - enabled: 0
+    path: Assets/Level 2.unity
+    guid: eb339ccdbeb9c504fb89df2b2aa3d86e
+  - enabled: 1
+    path: Assets/MapEditor.unity
+    guid: fa26f2844d74f994084e17deaa4618b0
