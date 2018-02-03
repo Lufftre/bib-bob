@@ -1,0 +1,141 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1898198636117984}
+  m_IsPrefabParent: 1
+--- !u!1 &1898198636117984
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4020990518405696}
+  - component: {fileID: 114665132600157140}
+  - component: {fileID: 50149620188538412}
+  - component: {fileID: 66057611434461768}
+  - component: {fileID: 114881197917806208}
+  m_Layer: 9
+  m_Name: LevelGenerator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4020990518405696
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1898198636117984}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!50 &50149620188538412
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1898198636117984}
+  m_BodyType: 2
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
+--- !u!66 &66057611434461768
+CompositeCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1898198636117984}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_GeometryType: 0
+  m_GenerationType: 0
+  m_EdgeRadius: 0.16
+  m_ColliderPaths: []
+  m_CompositePaths:
+    m_Paths: []
+  m_VertexDistance: 0.0005
+--- !u!114 &114665132600157140
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1898198636117984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d516826e52901044f914712684b2e932, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colorMappings:
+  - color: {r: 0, g: 0, b: 0, a: 1}
+    prefab: {fileID: 1687265709773492, guid: 8dda96e65eba3b842986f1aa216a0d3a, type: 2}
+  - color: {r: 0, g: 1, b: 0, a: 1}
+    prefab: {fileID: 1497914944097538, guid: 91fedecbb9e6631448bec0b1c921fbe8, type: 2}
+  - color: {r: 1, g: 0, b: 0, a: 1}
+    prefab: {fileID: 1117308332855874, guid: bdd6c21fb49b5b14c80f57ede20529e3, type: 2}
+  - color: {r: 1, g: 0, b: 1, a: 1}
+    prefab: {fileID: 1996099297534588, guid: 3a959f71e0e38e342aa5ee3ad9c1c2fb, type: 2}
+  levels: http://klingstael.se/bib-bob/levels/levels.xml
+  world: {fileID: 0}
+  worldObject: {fileID: 1333006618761930, guid: 9dec542ff1aa94d44a7c23d48e0ce7b7,
+    type: 2}
+--- !u!114 &114881197917806208
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1898198636117984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 44
+    i1: 155
+    i2: 236
+    i3: 174
+    i4: 130
+    i5: 21
+    i6: 49
+    i7: 244
+    i8: 232
+    i9: 248
+    i10: 233
+    i11: 134
+    i12: 78
+    i13: 193
+    i14: 228
+    i15: 120
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0

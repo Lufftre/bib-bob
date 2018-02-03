@@ -21,7 +21,6 @@ GameObject:
   - component: {fileID: 4709488849393588}
   - component: {fileID: 23920199306906002}
   - component: {fileID: 102639726878799336}
-  - component: {fileID: 114099886677348786}
   m_Layer: 0
   m_Name: Win Text
   m_TagString: Untagged
@@ -97,35 +96,3 @@ TextMesh:
   m_Color:
     serializedVersion: 2
     rgba: 4286940671
---- !u!114 &114099886677348786
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1420786321069074}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SceneId:
-    m_Value: 0
-  m_AssetId:
-    i0: 221
-    i1: 217
-    i2: 123
-    i3: 54
-    i4: 141
-    i5: 242
-    i6: 104
-    i7: 212
-    i8: 73
-    i9: 46
-    i10: 163
-    i11: 13
-    i12: 11
-    i13: 104
-    i14: 200
-    i15: 230
-  m_ServerOnly: 0
-  m_LocalPlayerAuthority: 0

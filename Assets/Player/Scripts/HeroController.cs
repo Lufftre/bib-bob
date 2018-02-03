@@ -74,8 +74,14 @@ public class HeroController : NetworkBehaviour {
 		//ColorPlayer(Color.white);
 		audioSource = GetComponent<AudioSource>();
 		health = GetComponent<Health>();
+		health.lives = 5;
 	}
 	
+	void Start() {
+		OnColorChanged(playerColor);
+		OnNameChanged(playerName);
+		health.OnDeath(health.lives);
+	}
 	// Update is called once per frame
 	void Update(){
 		if (!isLocalPlayer) return;
@@ -114,16 +120,16 @@ public class HeroController : NetworkBehaviour {
 			CmdFire();
 		}
 
-		if (transform.position.y < -50){
-			// health.TakeDamage(health.currentHealth);
+/* 		if (transform.position.y < -50){
+			//health.TakeDamage(health.currentHealth);
 			health.RpcRespawn();
-		}
+		} */
 	}
 
 	public override void OnStartLocalPlayer(){
 		//ColorPlayer(Color.green);
+		if (!isLocalPlayer) return;
 		Camera.main.GetComponent<CameraFollow>().setTarget(gameObject.transform);
-		health.lives = 1;
 	}
 
 	[Command]

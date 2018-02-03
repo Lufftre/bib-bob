@@ -13,6 +13,7 @@ public class Health : NetworkBehaviour {
 
     public RectTransform healthBar;
     //private NetworkStartPosition[] spawnPoints;
+    //[SyncVar]
     public TextMesh deathText;
 
     [SyncVar(hook = "OnDeath")]
@@ -20,15 +21,17 @@ public class Health : NetworkBehaviour {
 
     HeroController pc;
     Rigidbody2D rb;
+   
+   //[SyncVar(hook = "OnOB")]
+   public bool canOB = true;
 
-    GameHandler gameHandler;
-    
-
+   // void OnOB(bool ob){
+   //     canOB = ob;
+   // }
     void Start() {
         
         pc = GetComponent<HeroController>();
         rb = GetComponent<Rigidbody2D>();
-        gameHandler = GameObject.FindWithTag("GameHandler").GetComponent<GameHandler>();
     }
 
     public void TakeDamage(int amount){
@@ -41,14 +44,19 @@ public class Health : NetworkBehaviour {
 			if (destroyOnDeath) {
 				Destroy(gameObject);
 			} else {
-                
+                lives -= 1;
+                if (lives > 0){
+                    RpcRespawn();
+                } else {
+                    RpcHandlePlayerDeath();
+                }
 				currentHealth = maxHealth;
-				RpcRespawn();
 			}
         }
     }
 
-    void OnDeath(int deathCount){
+    public void OnDeath(int deathCount){
+        lives = deathCount;
         deathText.text = deathCount.ToString();
     }
 
@@ -59,8 +67,7 @@ public class Health : NetworkBehaviour {
     [ClientRpc]
     public void RpcRespawn(){
         if (isLocalPlayer) {
-            if (lives > 0 ){
-                lives -= 1;
+           // if (lives > 0 ){
                 // Set the spawn point to origin as a default value
                 Vector3 spawnPoint = Vector3.zero;
                 NetworkStartPosition[] spawnPoints = FindObjectsOfType<NetworkStartPosition>();
@@ -73,11 +80,28 @@ public class Health : NetworkBehaviour {
 
                 rb.velocity = Vector2.zero;
                 transform.position = spawnPoint;
-            } else {
-                Camera.main.transform.position = new Vector3(0, 0, -35);
-                Camera.main.transform.rotation = Quaternion.identity;
-                gameHandler.HandlePlayerDeath(gameObject);
-            }
+                CmdCanOB();
+           // } else {
+            //}
         }
+    }
+    [ClientRpc]
+    public void RpcHandlePlayerDeath(){
+        if (isLocalPlayer) {
+            Camera.main.transform.position = new Vector3(0, 0, -35);
+            Camera.main.transform.rotation = Quaternion.identity;
+            rb.velocity = Vector2.zero;
+            transform.position = Vector3.zero;
+            CmdHandlePlayerDeath();
+        }
+
+    }
+    [Command]
+    void CmdCanOB(){
+        canOB = true;
+    }
+    [Command]
+    void CmdHandlePlayerDeath(){
+        GameObject.FindWithTag("GameHandler").GetComponent<GameHandler>().CmdHandlePlayerDeath(gameObject);
     }
 }

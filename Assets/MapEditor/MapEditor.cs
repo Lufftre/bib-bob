@@ -10,7 +10,10 @@ public class MapEditor : NetworkBehaviour {
 	public string levels = "http://klingstael.se/bib-bob/levels/levels.xml";
 
 	// Use this for initialization
-	IEnumerator Start () {
+	public override void OnStartServer(){
+		StartCoroutine(DownloadAndCreateMap());
+	}
+	IEnumerator DownloadAndCreateMap () {
         // Start a download of the given URL
 		XmlDocument xmlDoc = new XmlDocument();
 		xmlDoc.Load(levels);
@@ -44,8 +47,7 @@ public class MapEditor : NetworkBehaviour {
 		GameObject[] players = GameObject.FindGameObjectsWithTag ("Player");
 		foreach (GameObject player in players){
 			Vector3 spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)].transform.position;
-			player.transform.position = spawnPoint;
-			
+			player.transform.position = spawnPoint;			
 		}
 
 	}
@@ -68,8 +70,7 @@ public class MapEditor : NetworkBehaviour {
 		foreach (ColorToPrefab colorMapping in colorMappings) {
 			if (colorMapping.color.Equals(pixelColor)){
 				Vector2 position = new Vector2(x - map.width/2, y-map.height/2);
-				// print(colorMapping.prefab);
-				var mapBlock = (GameObject)Instantiate(colorMapping.prefab, position, Quaternion.identity, transform);
+				var mapBlock = (GameObject)Instantiate(colorMapping.prefab, position, Quaternion.identity);
 				NetworkServer.Spawn(mapBlock);
 			}
 		}
